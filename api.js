@@ -98,3 +98,23 @@ export function postNewPosts ({description, imageUrl, token}) {
     return response.json();
   })
 }
+
+//посты пользователя
+
+export function userPost ({token, id}) {
+  return fetch(postsHost + `/user-posts/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  })
+  .then((response) => {
+    if (response.status === 401){
+      throw new Error("не авторизован");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    return data.posts;
+  });
+}
