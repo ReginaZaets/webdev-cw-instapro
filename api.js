@@ -1,6 +1,6 @@
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
-const personalKey = "prod";
+const personalKey = "regina-zaets";
 const baseHost = "https://wedev-api.sky.pro";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
 
@@ -74,7 +74,7 @@ export function uploadImage({ file }) {
 
 //новый пост
 
-export function postNewPosts ({description, imageUrl, token}) {
+export function postNewPosts({ description, imageUrl, token }) {
   return fetch(postsHost, {
     method: "POST",
     headers: {
@@ -85,36 +85,60 @@ export function postNewPosts ({description, imageUrl, token}) {
       imageUrl,
     })
   })
-  .then((response) => {
-    if (response.status === 500) {
-      throw new Error("ошибка сервера");
-    }
-    if (response.status === 401){
-      throw new Error("не авторизован");
-    }
-    if (response.status === 400){
-      throw new Error("не введено описание картинки");
-    }
-    return response.json();
-  })
+    .then((response) => {
+      if (response.status === 500) {
+        throw new Error("ошибка сервера");
+      }
+      if (response.status === 401) {
+        throw new Error("не авторизован");
+      }
+      if (response.status === 400) {
+        throw new Error("не введено описание картинки");
+      }
+      return response.json();
+    })
 }
 
 //посты пользователя
 
-export function userPost ({token, id}) {
+// export function userPost({ id }) {
+//   return fetch(postsHost + `/user-posts/${id}`, {
+//     method: "GET",
+//     headers: {
+//       Authorization: token,
+//       id: userId,
+//     },
+//   })
+//     .then((response) => {
+//       return response.json();
+//     })
+//     .then((data) => {
+//       console.log(data.posts)
+//       return data.posts.map((post) => {
+//         return {
+//           id: post.id,
+//           imageUrl: post.imageUrl,
+//           date: post.createdAt,
+//           description: post.description,
+//           login: post.user.login,
+//           isLiked: false,
+//           userId: post.user.id,
+//           imageAvatar: post.user.imageUrl,
+//           name: post.user.name,
+//           createdAt: 34,
+//         }
+//       });
+//     });
+// }
+
+export function userPost({ token, id }) {
   return fetch(postsHost + `/user-posts/${id}`, {
     method: "GET",
     headers: {
       Authorization: token,
     },
   })
-  .then((response) => {
-    if (response.status === 401){
-      throw new Error("не авторизован");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    return data.posts;
-  });
+    .then((response) => {
+      return response.json();
+    })
 }
