@@ -1,5 +1,6 @@
 import { posts } from "../index.js";
 import { renderHeaderComponent } from "./header-component.js";
+import { initEventListerner } from "./posts-page-component.js";
 
 const appEl = document.getElementById("app");
 
@@ -42,6 +43,6 @@ export function renderUserPost() {
         element: document.querySelector(".header-container"),
       });
 
-// initEventListerner(posts[0].user.id);
+  initEventListerner()
   
 }

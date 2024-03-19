@@ -97,7 +97,6 @@ export const goToPage = (newPage, data) => {
 
 export const renderApp = () => {
   const appEl = document.getElementById("app");
-  const currentUserName = user ? user.name : null;
   if (page === LOADING_PAGE) {
     return renderLoadingPageComponent({
       appEl,
@@ -148,7 +147,6 @@ export const renderApp = () => {
       posts,
       userId: page === USER_POSTS_PAGE ? currentUserId : null,
       token: getToken(),
-      currentUserName,
     });
   }
 };
