@@ -99,38 +99,6 @@ export function postNewPosts({ description, imageUrl, token }) {
     })
 }
 
-//посты пользователя
-
-// export function userPost({ id }) {
-//   return fetch(postsHost + `/user-posts/${id}`, {
-//     method: "GET",
-//     headers: {
-//       Authorization: token,
-//       id: userId,
-//     },
-//   })
-//     .then((response) => {
-//       return response.json();
-//     })
-//     .then((data) => {
-//       console.log(data.posts)
-//       return data.posts.map((post) => {
-//         return {
-//           id: post.id,
-//           imageUrl: post.imageUrl,
-//           date: post.createdAt,
-//           description: post.description,
-//           login: post.user.login,
-//           isLiked: false,
-//           userId: post.user.id,
-//           imageAvatar: post.user.imageUrl,
-//           name: post.user.name,
-//           createdAt: 34,
-//         }
-//       });
-//     });
-// }
-
 export function userPost({ token, id }) {
   return fetch(postsHost + `/user-posts/${id}`, {
     method: "GET",
