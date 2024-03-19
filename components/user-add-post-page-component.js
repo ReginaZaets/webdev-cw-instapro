@@ -4,7 +4,7 @@ import { renderHeaderComponent } from "./header-component.js";
 const appEl = document.getElementById("app");
 
 export function renderUserPost() {
-    const postHtml = posts.map((post) => {
+    const postHtml = posts.map((post, index) => {
         return `
         <div class="page-container">
                 <div class="header-container"></div>
@@ -18,15 +18,14 @@ export function renderUserPost() {
                       <img class="post-image" src="${post.imageUrl}">
                     </div>
                     <div class="post-likes">
-                      <button data-post-id="642d00579b190443860c2f32" class="like-button">
-                        <img src="./assets/images/like-active.svg">
+                      <button data-post-id="${post.id}" data-is-liked="${post.isLiked}" class="like-button ${post.isLiked ? "-active-like" : ''}" data-index="${index}"></button>
                       </button>
                       <p class="post-likes-text">
-                        Нравится: <strong>2</strong>
+                        Нравится: <strong>${post.user.name}</strong>
                       </p>
                     </div>
                     <p class="post-text">
-                      <span class="user-name">${post.user.name}</span>
+                      <span class="user-name">${user.name}</span>
                       ${post.description}
                     </p>
                     <p class="post-date">
@@ -42,4 +41,7 @@ export function renderUserPost() {
     renderHeaderComponent({
         element: document.querySelector(".header-container"),
       });
+
+// initEventListerner(posts[0].user.id);
+  
 }

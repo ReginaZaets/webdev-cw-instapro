@@ -1,6 +1,8 @@
-import { USER_POSTS_PAGE } from "../routes.js";
+import { USER_POSTS_PAGE, POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "../index.js";
+import { renderUserPost } from "./user-add-post-page-component.js";
+import { posts, goToPage, getToken } from "../index.js";
+import { addLike, deleteLike } from "../api.js";
 
 export function renderPostsPageComponent({ appEl }) {
   // TODO: реализовать рендер постов из api
@@ -57,4 +59,43 @@ export function renderPostsPageComponent({ appEl }) {
       });
     });
   }
+initEventListerner();
+
+}
+
+export function initEventListerner(userId) {
+  const likeButtonElements = document.querySelectorAll('.like-button');
+  for (const likeButtonElement of likeButtonElements) {
+    likeButtonElement.addEventListener('click', event => {
+      event.stopPropagation();
+      console.log(likeButtonElement.dataset);
+      if (likeButtonElement.dataset.isLiked === "true") {
+        deleteLike({ id: likeButtonElement.dataset.postId, token: getToken() })
+          .then(() => {
+            if (userId) {
+              goToPage(USER_POSTS_PAGE, { userId })
+            }
+            else {
+              goToPage(POSTS_PAGE, { noLoading: true })
+            }
+
+          })
+
+      } else {
+        addLike({ id: likeButtonElement.dataset.postId, token: getToken() })
+          .then(() => {
+            if (userId) {
+              goToPage(USER_POSTS_PAGE, { userId })
+            }
+            else {
+              goToPage(POSTS_PAGE, { noLoading: true })
+            }
+
+          })
+      }
+
+    })
+
+  }
+
 }

@@ -142,3 +142,25 @@ export function userPost({ token, id }) {
       return response.json();
     })
 }
+
+export function addLike({ id, token }) {
+  console.log(id);
+  return fetch(postsHost + `/${id}/like`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: token,
+      },
+    });
+}
+
+
+export function deleteLike({ id, token }) {
+  return fetch(postsHost + `/${id}/dislike`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: token,
+      },
+    });
+}

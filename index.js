@@ -15,14 +15,13 @@ import {
   removeUserFromLocalStorage,
   saveUserToLocalStorage,
 } from "./helpers.js";
-import {renderUserPost} from "./components/user-add-post-page-component.js"
 
 export let user = getUserFromLocalStorage();
 export let page = null;
 export let posts = [];
 export let currentUserId = null;
 
-const getToken = () => {
+export const getToken = () => {
   const token = user ? `Bearer ${user.token}` : undefined;
   return token;
 };
@@ -96,8 +95,9 @@ export const goToPage = (newPage, data) => {
   throw new Error("страницы не существует");
 };
 
-const renderApp = () => {
+export const renderApp = () => {
   const appEl = document.getElementById("app");
+  const currentUserName = user ? user.name : null;
   if (page === LOADING_PAGE) {
     return renderLoadingPageComponent({
       appEl,
@@ -147,6 +147,8 @@ const renderApp = () => {
       appEl,
       posts,
       userId: page === USER_POSTS_PAGE ? currentUserId : null,
+      token: getToken(),
+      currentUserName,
     });
   }
 };
