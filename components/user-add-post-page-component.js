@@ -2,7 +2,6 @@ import { posts } from "../index.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { initEventListerner } from "./posts-page-component.js";
 
-const appEl = document.getElementById("app");
 
 export function renderUserPost() {
     const postHtml = posts.map((post, index) => {

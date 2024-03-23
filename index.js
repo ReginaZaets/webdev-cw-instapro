@@ -20,6 +20,10 @@ export let user = getUserFromLocalStorage();
 export let page = null;
 export let posts = [];
 export let currentUserId = null;
+export function setPosts(newPosts) {
+  posts = newPosts;
+}
+
 
 export const getToken = () => {
   const token = user ? `Bearer ${user.token}` : undefined;
@@ -74,16 +78,16 @@ export const goToPage = (newPage, data) => {
       renderApp();
       currentUserId = data.userId;
       return userPost({ token: getToken(), id: data.userId })
-      .then((newPosts) => {
-        console.log("Открываю страницу пользователя: ", data.userId);
-        page = USER_POSTS_PAGE;
-        posts = newPosts.posts;
-        renderApp();
-      })
-      .catch((error) => {
-        console.warn(error);
-        goToPage(POSTS_PAGE);
-      })
+        .then((newPosts) => {
+          console.log("Открываю страницу пользователя: ", data.userId);
+          page = USER_POSTS_PAGE;
+          posts = newPosts.posts;
+          renderApp();
+        })
+        .catch((error) => {
+          console.warn(error);
+          goToPage(POSTS_PAGE);
+        });
     }
 
     page = newPage;
@@ -123,31 +127,35 @@ export const renderApp = () => {
       appEl,
       onAddPostClick({ description, imageUrl }) {
         // TODO: реализовать добавление поста в API
-        const commentImage = document.getElementById('textarea-input');
+        const commentImage = document.getElementById("textarea-input");
         postNewPosts({
-          description: commentImage.value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;"),
+          description: commentImage.value
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;"),
           imageUrl,
-          token: getToken()
+          token: getToken(),
         })
-        .then(() => {
-          renderPostsPageComponent()
-        })
-        .catch((error) => {
-          console.warn(error);
-        })
+          .then(() => {
+            renderPostsPageComponent();
+          })
+          .catch((error) => {
+            console.warn(error);
+          });
         console.log("Добавляю пост...", { description, imageUrl });
         goToPage(POSTS_PAGE);
       },
     });
   }
+  if (page === POSTS_PAGE) {
+    return renderPostsPageComponent();
+  }
 
-  if (page === POSTS_PAGE || page === USER_POSTS_PAGE) {
-    return renderPostsPageComponent({
-      appEl,
-      posts,
-      userId: page === USER_POSTS_PAGE ? currentUserId : null,
-      token: getToken(),
-    });
+  if (page === USER_POSTS_PAGE) {
+    // TODO: реализовать страницу фотографию пользвателя
+    //appEl.innerHTML = "Здесь будет страница фотографий пользователя";
+    return renderPostsPageComponent();
   }
 };
 
