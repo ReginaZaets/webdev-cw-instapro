@@ -109,6 +109,9 @@ export function userPost({ token, id }) {
     .then((response) => {
       return response.json();
     })
+    .then((data) => {
+      return data.posts;
+    });
 }
 
 export function addLike({ id, token }) {

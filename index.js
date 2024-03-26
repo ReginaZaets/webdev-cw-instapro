@@ -149,6 +149,7 @@ export const renderApp = () => {
     });
   }
   if (page === POSTS_PAGE) {
+    console.log(posts)
     return renderPostsPageComponent();
   }
 

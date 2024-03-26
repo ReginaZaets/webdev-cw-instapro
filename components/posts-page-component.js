@@ -1,7 +1,7 @@
 import { USER_POSTS_PAGE, POSTS_PAGE, LOADING_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage, getToken, renderApp, setPosts } from "../index.js";
-import { addLike, deleteLike, getPosts } from "../api.js";
+import { posts, goToPage, getToken, renderApp, setPosts, currentUserId, page } from "../index.js";
+import { addLike, deleteLike, getPosts, userPost } from "../api.js";
 import { formatDistanceToNow } from "date-fns";
 import ru from "date-fns/locale/ru";
 
@@ -37,11 +37,7 @@ export function renderPostsPageComponent() {
             <img class="post-image" src="${post.imageUrl}">
           </div>
           <div class="post-likes">
-            <button data-post-id="${post.id}" data-is-liked="${
-        post.isLiked
-      }" class="like-button ${
-        post.isLiked ? "-active-like" : ""
-      }" data-index="${index}"></button>
+            <button data-post-id="${post.id}" data-is-liked="${post.isLiked}" class="like-button ${post.isLiked ? "-active-like" : ""}" data-index="${index}"></button>
             <p class="post-likes-text">
               Нравится: <strong>${likes} </strong>
             </p>
@@ -78,6 +74,7 @@ export function renderPostsPageComponent() {
       });
     });
   }
+  initEventListerner()
 
   
 
@@ -89,17 +86,27 @@ export function initEventListerner() {
 
   for (const likeButtonElement of likeButtonElements) {
     likeButtonElement.addEventListener("click", () => {
-      if (likeButtonElement.dataset.isLiked === "true") {
+      console.log(likeButtonElements)
+      const index = likeButtonElement.dataset.index;
+      if (posts[index].isLiked === true) {
         deleteLike({
           id: likeButtonElement.dataset.postId,
           token: getToken(),
         })
         .then(() => {
-          getPosts()
+          if (page === POSTS_PAGE) {
+          getPosts({token: getToken()})
           .then((res) => {
             setPosts(res);
             renderApp();
          }) 
+        } else {
+          userPost({ token: getToken(), id: currentUserId })
+          .then((res) => {
+            setPosts(res);
+            renderApp();
+         }) 
+        }
         })
             
         
@@ -109,7 +116,7 @@ export function initEventListerner() {
           token: getToken(),
         })
         .then(() => {
-          getPosts()
+          getPosts({token: getToken()})
           .then((res) => {
             setPosts(res);
             renderApp();
@@ -117,6 +124,5 @@ export function initEventListerner() {
         })    
        
   }})
-    
 };
 }
