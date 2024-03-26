@@ -4,6 +4,7 @@ import { posts, goToPage, getToken, renderApp, setPosts, currentUserId, page } f
 import { addLike, deleteLike, getPosts, userPost } from "../api.js";
 import { formatDistanceToNow } from "date-fns";
 import ru from "date-fns/locale/ru";
+import {sanitizeHtml} from "./sanitizeHtml.js"
 
 export function renderPostsPageComponent() {
   const appEl = document.getElementById("app");
@@ -44,10 +45,13 @@ export function renderPostsPageComponent() {
           </div>
           <p class="post-text">
             <span class="user-name">${post.user.name} </span>
-              : ${post.description}
+              : ${sanitizeHtml(post.description)}
           </p>
           <p class="post-date">
-            ${(formatDistanceToNow(new Date(post.createdAt)), { locale: ru })}
+            ${formatDistanceToNow(new Date(post.createdAt), { 
+              locale: ru, 
+              addSuffix: true,
+            })}
           </p>
         </li>
     `;
@@ -116,12 +120,20 @@ export function initEventListerner() {
           token: getToken(),
         })
         .then(() => {
+          if (page === POSTS_PAGE) {
           getPosts({token: getToken()})
           .then((res) => {
             setPosts(res);
             renderApp();
          }) 
-        })    
+        } else {
+          userPost({ token: getToken(), id: currentUserId })
+          .then((res) => {
+            setPosts(res);
+            renderApp();
+         }) 
+        }
+        }) 
        
   }})
 };

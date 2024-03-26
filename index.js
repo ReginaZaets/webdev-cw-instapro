@@ -81,7 +81,7 @@ export const goToPage = (newPage, data) => {
         .then((newPosts) => {
           console.log("Открываю страницу пользователя: ", data.userId);
           page = USER_POSTS_PAGE;
-          posts = newPosts.posts;
+          posts = newPosts;
           renderApp();
         })
         .catch((error) => {
