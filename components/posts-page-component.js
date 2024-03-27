@@ -21,9 +21,9 @@ export function renderPostsPageComponent() {
       let likes;
 
       if (post.likes.length === 1) {
-        likes = post.likes[0].name;
+        likes = sanitizeHtml(post.likes[0].name);
       } else if (post.likes.length > 1) {
-        likes = `${post.likes[0].name} и еще ${post.likes.length - 1}`;
+        likes = `${sanitizeHtml(post.likes[0].name)} и еще ${post.likes.length - 1}`;
       } else {
         likes = 0;
       }
@@ -32,7 +32,7 @@ export function renderPostsPageComponent() {
         <li class="post">
           <div class="post-header" data-user-id="${post.user.id}">
             <img src="${post.user.imageUrl}" class="post-header__user-image">
-            <p class="post-header__user-name">${post.user.name}</p>
+            <p class="post-header__user-name">${sanitizeHtml(post.user.name)}</p>
           </div>
           <div class="post-image-container">
             <img class="post-image" src="${post.imageUrl}">
@@ -44,7 +44,7 @@ export function renderPostsPageComponent() {
             </p>
           </div>
           <p class="post-text">
-            <span class="user-name">${post.user.name} </span>
+            <span class="user-name">${sanitizeHtml(post.user.name)} </span>
               : ${sanitizeHtml(post.description)}
           </p>
           <p class="post-date">
@@ -83,8 +83,8 @@ export function renderPostsPageComponent() {
   
 
 }
-
-
+// alert("Проверка &lt;b&gt;на&lt;/b&gt; &lt;h1&gt;теги&lt;/h1&gt;".replaceAll( "&lt;", "<")
+// .replaceAll( "&gt;", ">"))
 export function initEventListerner() {
   const likeButtonElements = document.querySelectorAll(".like-button");
 
